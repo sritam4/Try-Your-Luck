@@ -1,0 +1,248 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 80px;
+   
+}
+#User{
+    width: 750px;
+    margin: auto;
+    height: 120px;
+    border: solid 1px;
+    background-color: rgb(89, 225, 225);
+}
+
+#Balance-box{
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+    font-weight: 500;
+    font-size: 20px;
+    color: rgb(251, 251, 251);
+    /* border: solid; */
+    /* position: absolute; */
+}
+
+#Balance{
+    margin-left: 10px;
+}
+
+#recharge-button{
+    background-color: rgb(57, 57, 243);
+    color: white;
+    height: 30px;
+    width: 80px;
+    border-radius: 6px;
+    border: none;
+    margin-right: 350px;
+    margin-left: auto;
+}
+
+#Timer-box{
+    /* border: solid blue; */
+    padding: 10px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    align-items: center;
+    color: rgb(59, 55, 55);
+    font-size: large;
+}
+
+#Timer{
+    /* width: 300px; */
+    margin-left: 15px;
+    /* border: solid; */
+}
+
+#Refresh{
+    /* width: 60px; */
+    /* margin-right: 10px; */
+    margin-left: auto;
+}
+
+#choice,#history,#user-record{
+    width: 700px;
+    margin: auto;
+}
+
+#color{
+    margin: 40px 0px 30px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.color-box{
+    width: 25%;
+    height: 40px;
+    background-color: red;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    box-shadow: 0px 3px 5px rgb(68, 64, 64);
+}
+#number{
+    margin: 10px;
+    width: 90%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    column-gap: 15px;
+    
+    /* border: solid 1px; */
+}
+.number-box{
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 15px;
+    margin: 7px;
+    color: white;
+    font-size: larger;
+    font-weight: bold;
+    box-shadow: 0px 3px 5px rgb(68, 64, 64);
+    position: relative;
+    overflow: hidden;
+}
+
+.Red{
+    background-color: rgb(160, 4, 4);
+}
+.Green{
+    background-color: rgb(6, 116, 6);
+}
+.Blue{
+    background-color: rgb(9, 9, 154);
+}
+
+.half{
+    width: 40%;
+    height:150%;
+    position: absolute;
+    top: -50;
+    left: 0;
+    background-color: rgba(9, 9, 154, 0.632);
+    transform-origin: 50 50;
+    transform: rotate(-45deg);
+}
+
+.partition-line{
+    background-color: rgb(5, 92, 5);
+    height: 2px;
+    margin: 30px 0px 30px 0px;
+    
+}
+
+#Result-headline,#Record-headline{
+    width: fit-content;
+    font-size: 25px;
+    font-weight: bold;
+    margin: auto;
+    margin-bottom: 20px;
+    /* text-decoration: underline; */
+    
+}
+
+#Result-header,.result{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* border: solid 1px; */
+}
+
+.heads{
+    font-size: 20px;
+    /* font-weight: bold; */
+    color: rgb(50, 1, 95);
+    /* border: solid; */
+}
+
+.result{
+    height: 20px;
+    font-size: 14px; 
+}
+
+
+.Colour-data-box{
+    margin-right: 5px;
+    width: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* border: solid; */
+}
+
+.Colour-data{
+    /* border: solid red; */
+    /* margin-right: 10px; */
+    background-color: rgb(25, 0, 255);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 1px;
+}
+
+
+/* ======================================== MEDIA QUERIES FOR RESPONSIVENESS======================================= */
+
+@media (max-width:750px) {
+    #User,#choice,#history,#user-record{
+        /* margin: 20px; */
+        width: 98%;
+        padding: 5px;
+        margin: auto;
+        
+    }
+    #User{
+        height: 70px;
+        /* width: 100%; */
+    }
+    #Balance-box{
+        font-size: 15px;
+        /* border: solid; */
+        margin: 5px;
+        margin-top: 10px;
+        height: auto;
+    }
+    #recharge-button{
+        margin-right: 10px;
+        font-size: 10px;
+        height: 20px;
+        width: 60px;
+    }
+    #Timer-box{
+        font-size: smaller;
+        padding: 5px;
+        height: auto;
+    }
+    .color-box{
+        font-size: smaller;
+        border-radius: 2px;
+    }
+    .number-box{
+        height: 12px;
+        width: 12px;
+        font-size: smaller;
+    }
+    #number{
+        column-gap: 2px;
+    }
+    #Result-headline{
+        font-size:20px;
+    }
+    .heads{
+        font-size: medium;
+    }
+    #Record-headline{
+        font-size: 20px;
+    }
+
+}
