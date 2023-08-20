@@ -31,41 +31,52 @@ const Q1=document.getElementById("Q1");
 const N1=document.getElementById("N1");
 const C1=document.getElementById("C1");
 
-let resultArray=["Start"];
-// console.log(resultArray); for debugging
+let resultArray=[];
 let string;
-let quantumArray=["Start"];
-// console.log(quantumArray);  for debugging
+// console.log(resultArray); for debugging
+
+let quantumArray=[];
 let quantumString;
+// console.log(quantumArray);  for debugging
 
 let userBalance=0;
 let userAmount;
 let userColor;
-let isChoosed;
+let isChoosed =false;
 let recordArray=[];
-isChoosed=false;
-// persiveisChoosed();
+
 
 setInterval(Timer,1000);
+// getpersivequantumArray();
+// getpersiveresultArray();
 update();
-
 getPersiveBalance();
 
 document.getElementById("recharge-button").addEventListener("click",recharge);
 document.getElementById("redbox").addEventListener("click",userInputRed);
-document.getElementById("bluebox").addEventListener("click",Unavailable);
+document.getElementById("bluebox").addEventListener("click",userInputBlue);
 document.getElementById("greenbox").addEventListener("click",userInputGreen);
+
+let numbers=document.querySelectorAll(".number-box");
+numbers=Array.from(numbers).forEach((element)=>{
+  element.addEventListener("click",Unavailable);
+});
 
 getPersiveisChoosed();
 if(isChoosed){
-  winLoss();
   console.log("winloss called");
+  winLoss();
 }
 isChoosed=false;
 persiveisChoosed();
 
-document.getElementById("Balance").innerHTML="₹ "+userBalance;
-// console.log(userBalance);
+if(userBalance==null){
+  document.getElementById("Balance").innerHTML="₹ "+"00.00";
+}
+else{
+  document.getElementById("Balance").innerHTML="₹ "+userBalance;
+  // console.log(userBalance)
+}
 
 updateMyRecord();
 
@@ -92,47 +103,48 @@ function reload(){
 
 
 function result(){
-  // console.log("result called"); for debugging
   //storing the outputnum in the local storage
   let randomnum=Math.floor(Math.random()*100);
   let outputNum= Math.floor(randomnum/10);
-  // console.log(outputNum);  for debugging
-  
+  resultArray=Array.from(resultArray);
   let length=resultArray.unshift(outputNum);
-  // console.log(resultArray); for debugging
+  // console.log(resultArray); //for debugging
   if(length>6){
     length=resultArray.pop();
   }
-  string=JSON.stringify(resultArray);
-  localStorage.setItem("array",string);
+  persiveresultArray();
   
   // storing the Quantum period in local storage
+  quantumArray=Array.from(quantumArray);
   let quantumLength= quantumArray.unshift(Quantum);
-  // console.log(quantumArray); for debugging
+  // console.log(quantumArray); //for debugging
   if(quantumLength>6){
     quantumLength= quantumArray.pop();
   }
-  quantumString=JSON.stringify(quantumArray);
-  localStorage.setItem("quantum",quantumString);
+  persivequantumArray();
 }
 
 function update(){
-  // console.log("update called"); for debugging
-  //fetching the current Results
-  resultArray = localStorage.getItem("array"); //getting array from local storage
-  resultArray = JSON.parse(resultArray); //converting to array type
-  // console.log(resultArray);  for debugging
-  
-  //fetching the current time Quantum
-  quantumArray= localStorage.getItem("quantum");
-  quantumArray=JSON.parse(quantumArray);
-  // console.log(quantumArray);  for debugging
+  // fetching the current Result
+  getpersiveresultArray();
+  if(resultArray==null){
+    console.log(resultArray);
+    resultArray="start";
+    persiveresultArray();
+  }
+  //fetching the current Quantum
+  getpersivequantumArray();
+  if(quantumArray==null){
+    console.log(quantumArray);
+    quantumArray="start";
+    persivequantumArray();
+  }
   
   //updating the Quantum section of RESULT
   quantumId.forEach((element,index)=>{
     document.getElementById(element).innerHTML=quantumArray[index];
   })
-  
+
   //updating the Number section of the RESULT
   numberId.forEach((element,index)=>{
     document.getElementById(element).innerHTML=resultArray[index];
@@ -173,6 +185,28 @@ function recharge(){
 }
 
 // =====================================functions ====================================================
+function persiveresultArray(){
+  string=JSON.stringify(resultArray);
+  localStorage.setItem("array",string);
+}
+
+function getpersiveresultArray(){
+  resultArray = localStorage.getItem("array"); //getting array from local storage
+  resultArray = JSON.parse(resultArray); //converting to array type
+  // console.log(resultArray);  for debugging
+}
+
+function persivequantumArray(){
+  quantumString=JSON.stringify(quantumArray);
+  localStorage.setItem("quantum",quantumString);
+}
+
+function getpersivequantumArray(){
+  quantumArray= localStorage.getItem("quantum");
+  quantumArray=JSON.parse(quantumArray);
+  // console.log(quantumArray);  for debugging
+}
+
 function persiveBalance(){
   let usrBlns=JSON.stringify(userBalance);
   localStorage.setItem("UB",usrBlns);
@@ -232,6 +266,7 @@ function userInputRed(){
     }
     else{
       console.log(userAmount);
+      console.log(userColor);
       userBalance=userBalance-userAmount;
       document.getElementById("Balance").innerHTML="₹ "+userBalance;
       isChoosed=true;
@@ -250,7 +285,9 @@ function userInputBlue(){
       alert("Insufficient Balance");
     }
     else{
+      console.log(userColor);
       userBalance=userBalance-userAmount;
+      console.log(userAmount);
       document.getElementById("Balance").innerHTML="₹ "+userBalance;
       isChoosed=true;
       persiveBalance();
@@ -268,6 +305,8 @@ function userInputGreen(){
       alert("Insufficient Balance");
     }
     else{
+      console.log(userAmount);
+      console.log(userColor);
       userBalance=userBalance-userAmount;
       document.getElementById("Balance").innerHTML="₹ "+userBalance;
       isChoosed=true;
@@ -308,7 +347,10 @@ function Loss(){
 function winLoss(){
   getPersiveValues();
   
-  if(resultArray[0]%2==0){
+  if(resultArray[0]==0||resultArray[0]==5){
+    userColor=="blue"?win():Loss();
+  }
+  else if(resultArray[0]%2==0){
     userColor=="red"?win():Loss();
   }
   else{
@@ -317,7 +359,12 @@ function winLoss(){
 }
 
 function updateMyRecord(){
+  // console.log(recordArray);
   getPersiveRecord();
+  if(recordArray==null){
+    recordArray=[0,"blue","Nutral","Not sure"];
+    persiveRecord();
+  }
   document.getElementById("A1").innerHTML=recordArray[3];
   document.getElementById("R1").innerHTML=recordArray[2];
   document.getElementById("R1").style.color=recordArray[1];
@@ -327,5 +374,5 @@ function updateMyRecord(){
 }
 
 function Unavailable(){
-  alert("Currently Unavailable!!!\n Wait for next update Or Play with red and green.");
+  alert("Currently Unavailable!!!\n Wait for next update Or Play with Red, Blue and Green.");
 }
