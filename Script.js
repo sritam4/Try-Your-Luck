@@ -2,8 +2,8 @@ const date=new Date();
 const currsec=date.getSeconds();
 const currmin=date.getMinutes();
 const currhour=date.getHours();
-const currdate=date.getDate();
-const currmonth=date.getMonth();
+const currdate=date.getDate()<10? "0"+date.getDate() : date.getDate();
+const currmonth=date.getMonth()<10? "0"+date.getMonth() : date.getMonth();
 const curryear=date.getFullYear();
 
 let sec;
@@ -18,8 +18,8 @@ else{
 }
 
 const quantumDate=curryear.toString()+ currmonth.toString()+ currdate.toString();
-const quantumPeriod=Math.floor(((currhour*60)+currmin)/3)+1;
-const Quantum= quantumDate+quantumPeriod.toString();
+const quantumPeriod=(Math.floor(((currhour*60)+currmin)/3)+1);
+
 // console.log(Quantum);
 
 const quantumId=["Q1","Q2","Q3","Q4","Q5","Q6"];
@@ -46,12 +46,6 @@ let isChoosed =false;
 let recordArray=[];
 
 
-setInterval(Timer,1000);
-// getpersivequantumArray();
-// getpersiveresultArray();
-update();
-getPersiveBalance();
-
 document.getElementById("recharge-button").addEventListener("click",recharge);
 document.getElementById("redbox").addEventListener("click",userInputRed);
 document.getElementById("bluebox").addEventListener("click",userInputBlue);
@@ -62,13 +56,9 @@ numbers=Array.from(numbers).forEach((element)=>{
   element.addEventListener("click",Unavailable);
 });
 
-getPersiveisChoosed();
-if(isChoosed){
-  console.log("winloss called");
-  winLoss();
-}
-isChoosed=false;
-persiveisChoosed();
+setInterval(Timer,1000);
+update();
+getPersiveBalance();
 
 if(userBalance==null){
   document.getElementById("Balance").innerHTML="₹ "+"00.00";
@@ -80,7 +70,10 @@ else{
 
 updateMyRecord();
 
-
+$('.floating-button').draggable();
+document.querySelector(".floating-button").addEventListener("click",()=>{
+  alert("Game Rules \n 1)Recharge your wallet By clicking the recharge button.\n 2) You can Choose Colour Or Number according to your choice.\n 3) Now Bet the amount from your balance for the next Quantum. \n In case of Colour.\n 4) If your prediction is correct Your bet amount will be DOUBLED.\n 5) If your prediction is incorrect you will LOSE the Bet amount. \n In case of Number.\n 6) If your prediction is correct Your bet amount will be 10X.\n 7) If your prediction is incorrect you will LOSE the Bet amount. \n 8)Though it is not the real money There is NO chance of Monetary Loss.")
+})
 
 // ----------------------------functions----------------------------------------
 
@@ -91,7 +84,7 @@ function Timer(){
   // console.log("0"+min+":"+newsec);
   document.getElementById("Timer").innerHTML="0"+min+":"+newsec;
   sec--;
-  if(sec<0){ //refreshing the page for good syncing..
+  if(sec==0){ //refreshing the page for good syncing..
     result();
     reload();
   }
@@ -115,6 +108,7 @@ function result(){
   persiveresultArray();
   
   // storing the Quantum period in local storage
+  const Quantum= quantumDate+quantumPeriod.toString();
   quantumArray=Array.from(quantumArray);
   let quantumLength= quantumArray.unshift(Quantum);
   // console.log(quantumArray); //for debugging
@@ -122,6 +116,16 @@ function result(){
     quantumLength= quantumArray.pop();
   }
   persivequantumArray();
+
+  getPersiveisChoosed();
+  if(isChoosed){
+  console.log("winloss called");
+  winLoss();
+    
+  isChoosed=false;
+  persiveisChoosed();
+
+  }
 }
 
 function update(){
@@ -141,6 +145,7 @@ function update(){
   }
   
   //updating the Quantum section of RESULT
+  console.log();
   quantumId.forEach((element,index)=>{
     document.getElementById(element).innerHTML=quantumArray[index];
   })
@@ -178,7 +183,8 @@ function recharge(){
     getPersiveBalance();
   }
   else{
-    userBalance=amt;
+    amt=parseInt(amt);
+    userBalance=userBalance+amt;
     persiveBalance();
     document.getElementById("Balance").innerHTML="₹ "+userBalance;
   }
@@ -347,14 +353,17 @@ function Loss(){
 function winLoss(){
   getPersiveValues();
   
-  if(resultArray[0]==0||resultArray[0]==5){
-    userColor=="blue"?win():Loss();
-  }
-  else if(resultArray[0]%2==0){
+  if(resultArray[0]%2==0){
     userColor=="red"?win():Loss();
+    if(resultArray[0]==0){
+      userColor=="blue"?win():Loss();
+    }
   }
   else{
     userColor=="green"?win():Loss();
+    if(resultArray[0]==5){
+      userColor=="blue"?win():Loss();
+    }
   }
 }
 
