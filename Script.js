@@ -70,7 +70,9 @@ else{
 
 updateMyRecord();
 
+// script for draggable button------------------------
 $('.floating-button').draggable();
+
 document.querySelector(".floating-button").addEventListener("click",()=>{
   alert("Game Rules \n 1)Recharge your wallet By clicking the recharge button.\n 2) You can Choose Colour Or Number according to your choice.\n 3) Now Bet the amount from your balance for the next Quantum. \n In case of Colour.\n 4) If your prediction is correct Your bet amount will be DOUBLED.\n 5) If your prediction is incorrect you will LOSE the Bet amount. \n In case of Number.\n 6) If your prediction is correct Your bet amount will be 10X.\n 7) If your prediction is incorrect you will LOSE the Bet amount. \n 8)Though it is not the real money There is NO chance of Monetary Loss.")
 })

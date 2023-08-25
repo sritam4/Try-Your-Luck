@@ -212,7 +212,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 45%;
+    top: 50%;
     right: 10px;
     cursor: pointer;
 }
