@@ -1,3 +1,4 @@
+//Execution: variable declarations and Function calls
 const date=new Date();
 const currsec=date.getSeconds();
 const currmin=date.getMinutes();
@@ -19,42 +20,46 @@ else{
 
 const quantumDate=curryear.toString()+ currmonth.toString()+ currdate.toString();
 const quantumPeriod=(Math.floor(((currhour*60)+currmin)/3)+1);
+const currQuantum=quantumDate+(quantumPeriod).toString();
+document.querySelector(".next-Quantum").innerHTML=currQuantum;
 
 // console.log(Quantum);
+//Arrays to store the results of RESULT section
+const quantumId=["Q1","Q2","Q3","Q4","Q5","Q6","Q7","Q8","Q9","Q10"];
+const colorId=["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10"];
+const numberId=["N1","N2","N3","N4","N5","N6","N7","N8","N9","N10"];
 
-const quantumId=["Q1","Q2","Q3","Q4","Q5","Q6"];
-const colorId=["C1","C2","C3","C4","C5","C6"];
-const numberId=["N1","N2","N3","N4","N5","N6"];
-const colourboxId=["B1","B2","B3","B4","B5","B6"];
-
-const Q1=document.getElementById("Q1");
-const N1=document.getElementById("N1");
-const C1=document.getElementById("C1");
+//Arrays to store the result of RECORD section
+const R_QuantumId=["A1","A2","A3","A4","A5"];
+const resultId=["R1","R2","R3","R4","R5"];
+const profitId=["P1","P2","P3","P4","P5"];
 
 let resultArray=[];
-let string;
-// console.log(resultArray); for debugging
+let resultString;
 
 let quantumArray=[];
 let quantumString;
-// console.log(quantumArray);  for debugging
 
 let userBalance=0;
-let userAmount;
-let userColor;
+let useramt;
+let userAmount=[];
+let userColor=[];3
 let isChoosed =false;
-let recordArray=[];
+let recordQuantumArray=[];
+let recordResultArray=[];
+let recordProfitArray=[];
 
 
 document.getElementById("recharge-button").addEventListener("click",recharge);
-document.getElementById("redbox").addEventListener("click",userInputRed);
-document.getElementById("bluebox").addEventListener("click",userInputBlue);
-document.getElementById("greenbox").addEventListener("click",userInputGreen);
+document.getElementById("redbox").addEventListener("click",userInputCol);
+document.getElementById("bluebox").addEventListener("click",userInputCol);
+document.getElementById("greenbox").addEventListener("click",userInputCol);
 
-let numbers=document.querySelectorAll(".number-box");
-numbers=Array.from(numbers).forEach((element)=>{
-  element.addEventListener("click",Unavailable);
-});
+let number=document.querySelectorAll(".number-box");
+// console.log(number);
+number.forEach((element)=>{
+  element.addEventListener("click",userInputNum);
+})
 
 setInterval(Timer,1000);
 update();
@@ -74,10 +79,14 @@ updateMyRecord();
 $('.floating-button').draggable();
 
 document.querySelector(".floating-button").addEventListener("click",()=>{
-  alert("Game Rules \n 1)Recharge your wallet By clicking the recharge button.\n 2) You can Choose Colour Or Number according to your choice.\n 3) Now Bet the amount from your balance for the next Quantum. \n In case of Colour.\n 4) If your prediction is correct Your bet amount will be DOUBLED.\n 5) If your prediction is incorrect you will LOSE the Bet amount. \n In case of Number.\n 6) If your prediction is correct Your bet amount will be 10X.\n 7) If your prediction is incorrect you will LOSE the Bet amount. \n 8)Though it is not the real money There is NO chance of Monetary Loss.")
+  alert("Game Rules \n 1)Recharge your wallet By clicking the Recharge button.\n 2) You can Choose Colour Or Number according to your choice.\n 3) Now Bet the amount from your balance for the next Quantum. \n\n In case of Colour.\n 4) If your prediction is correct Your bet amount will be DOUBLED.\n 5) If your prediction is incorrect you will LOSE the Bet amount.\n\n In case of Half Colour \n 6) if you bet on a colour and Your Prediction is Half correct Your bet amount will be 1.5X.\n  7) If your prediction is incorrect you will LOSE the Bet amount. \n\n In case of Number.\n 8) If your prediction is correct Your bet amount will be 8.5X.\n 9) If your prediction is incorrect you will LOSE the Bet amount. \n\n 10) Bet BEFORE the Count Down goes below 30 second \n 11)Though it is not the real money There is NO chance of Monetary Loss.")
 })
 
-// ----------------------------functions----------------------------------------
+
+
+
+
+// ------------------------------------------ Main functions----------------------------------------
 
 function Timer(){
   // console.log("timer called"); for debugging
@@ -86,9 +95,15 @@ function Timer(){
   // console.log("0"+min+":"+newsec);
   document.getElementById("Timer").innerHTML="0"+min+":"+newsec;
   sec--;
+  if(sec<30){
+    fade();
+  }
   if(sec==0){ //refreshing the page for good syncing..
     result();
     reload();
+  }
+  if(isChoosed){
+    waitValues();
   }
 } 
 
@@ -101,10 +116,11 @@ function result(){
   //storing the outputnum in the local storage
   let randomnum=Math.floor(Math.random()*100);
   let outputNum= Math.floor(randomnum/10);
+  // let outputNum=4;
   resultArray=Array.from(resultArray);
   let length=resultArray.unshift(outputNum);
   // console.log(resultArray); //for debugging
-  if(length>6){
+  if(length>10){
     length=resultArray.pop();
   }
   persiveresultArray();
@@ -114,14 +130,13 @@ function result(){
   quantumArray=Array.from(quantumArray);
   let quantumLength= quantumArray.unshift(Quantum);
   // console.log(quantumArray); //for debugging
-  if(quantumLength>6){
+  if(quantumLength>10){
     quantumLength= quantumArray.pop();
   }
   persivequantumArray();
 
   getPersiveisChoosed();
   if(isChoosed){
-  console.log("winloss called");
   winLoss();
     
   isChoosed=false;
@@ -135,19 +150,19 @@ function update(){
   getpersiveresultArray();
   if(resultArray==null){
     console.log(resultArray);
-    resultArray="start";
+    resultArray=[0,1,2,3,4,5,6,7,8,9];
     persiveresultArray();
   }
   //fetching the current Quantum
   getpersivequantumArray();
   if(quantumArray==null){
     console.log(quantumArray);
-    quantumArray="start";
+    quantumArray="START-WAIT";
     persivequantumArray();
   }
   
   //updating the Quantum section of RESULT
-  console.log();
+  // console.log();
   quantumId.forEach((element,index)=>{
     document.getElementById(element).innerHTML=quantumArray[index];
   })
@@ -178,24 +193,234 @@ function update(){
     }
   }); 
 }
+
 function recharge(){
   let amt=prompt("Enter Amount to Recharge:");
-  // amt=Number.parseInt(amt);
-  if(amt==null){
-    getPersiveBalance();
-  }
-  else{
-    amt=parseInt(amt);
-    userBalance=userBalance+amt;
-    persiveBalance();
-    document.getElementById("Balance").innerHTML="₹ "+userBalance;
+  amt=parseInt(amt);
+  if(amt){
+    if(amt>=100000){
+      alert("RECHARGE SMALL AMOUNT !!!!!!!!!\n ");
+    }
+    else{
+      amt=parseInt(amt);
+      userBalance=userBalance+amt;
+      persiveBalance();
+      document.getElementById("Balance").innerHTML="₹ "+userBalance;
+    }
   }
 }
 
-// =====================================functions ====================================================
+function fade(){
+  document.querySelectorAll(".color-box").forEach((element)=>{
+    element.style.backgroundColor="rgb(200, 200, 200)";
+    element.style.color="rgb(129, 129, 132)";
+    element.removeEventListener("click",userInputNum);
+  })
+  document.querySelectorAll(".number-box").forEach((element)=>{
+    element.style.backgroundColor="rgb(200, 200, 200)";
+    element.style.color="rgb(129, 129, 132)";
+    element.removeEventListener("click",userInputNum);
+  })
+  document.querySelectorAll(".half").forEach((element)=>{
+    element.style.backgroundColor="transparent";
+  })
+}
+
+function userInputCol(C){
+  let temp=C.target.innerText;
+  if(temp=="Join Green"){
+    temp="green";
+  }
+  else if(temp=="Join Red"){
+    temp="red"
+  }
+  else{
+    temp="blue";
+  }
+  // console.log(temp);
+
+  useramt=prompt("Enter amount for "+temp.toUpperCase()+" : ");
+  useramt=parseInt(useramt);
+  if(useramt){
+    if(useramt>userBalance){
+      alert("Insufficient Balance");
+    }
+    else{
+      userAmount.push(useramt);
+      userColor.push(temp);
+      console.log(userColor);
+      console.log(userAmount);
+      userBalance=userBalance-useramt;
+      document.getElementById("Balance").innerHTML="₹ "+userBalance;
+      isChoosed=true;
+      persiveBalance();
+      persiveisChoosed();
+      persiveValues();
+    }
+  }
+}
+
+function userInputNum(n){
+  let temp=n.target.innerText;
+  temp=parseInt(temp);
+  useramt=prompt("Enter amount for "+temp+" : ");
+  useramt=parseInt(useramt);
+  if(useramt){
+    if(useramt>userBalance){
+      alert("Insufficient Balance");
+    }
+    else{
+      userAmount.push(useramt);
+      userColor.push(temp);
+      console.log(userAmount);
+      console.log(userColor);
+      userBalance=userBalance-useramt;
+      document.getElementById("Balance").innerHTML="₹ "+userBalance;
+      isChoosed=true;
+      persiveBalance();
+      persiveisChoosed();
+      persiveValues();
+    }
+  }
+}
+
+function win(p,betamt){
+  recordQuantumArray.unshift(quantumArray[0]);
+  recordResultArray.unshift("Success");
+  recordProfitArray.unshift(betamt*p);
+
+  let lenRQA=recordQuantumArray.length;
+  let lenRRA=recordResultArray.length;
+  let lenRPA=recordProfitArray.length;
+  if(lenRQA>=6){recordQuantumArray.pop();}
+  if(lenRRA>=6){recordResultArray.pop();}
+  if(lenRPA>=6){recordProfitArray.pop();}
+  
+  userBalance=userBalance+(betamt*p);
+  persiveBalance();
+  persiveRecordQuantumArray();
+  persiveRecordResultArray();
+  persiveRecordProfitArray();
+  
+}
+
+function Loss(betamt){
+  recordQuantumArray.unshift(quantumArray[0]);
+  recordResultArray.unshift("Fail");
+  recordProfitArray.unshift(-betamt);
+  
+  let lenRQA=recordQuantumArray.length;
+  let lenRRA=recordResultArray.length;
+  let lenRPA=recordProfitArray.length;
+  if(lenRQA>=6){recordQuantumArray.pop();}
+  if(lenRRA>=6){recordResultArray.pop();}
+  if(lenRPA>=6){recordProfitArray.pop();}
+
+  persiveRecordQuantumArray();
+  persiveRecordResultArray();
+  persiveRecordProfitArray();
+}
+
+//Function to decide wheather user won or loss
+function winLoss(){
+  console.log("winloss called");
+  getPersiveValues();
+
+  //new logic
+  userColor.forEach((element,index)=>{
+    if(typeof(element)=="string"){
+      if(element=="red"){
+        if(resultArray[0]==0){
+          win(1.5,userAmount[index]);
+        }
+        else{
+          (resultArray[0]%2==0)?win(2,userAmount[index]) : Loss(userAmount[index]);
+        }
+      }
+      else if(element=="green"){
+        if(resultArray[0]==5){
+          win(1.5,userAmount[index]);
+        }
+        else{
+          (resultArray[0]%2!=0)?win(2,userAmount[index]) : Loss(userAmount[index]);
+        }
+      }
+      else{
+        (resultArray[0]==0||resultArray[0]==5)?win(1.5,userAmount[index]) : Loss(userAmount[index]);
+      }
+    }
+    else if(typeof(element)=="number"){
+      element==resultArray[0]? win(8.5,userAmount[index]) : Loss(userAmount[index]);
+    }
+    else{
+      console.log("ERROR OCCURED");
+    }
+  })
+  userColor=[];
+  userAmount=[];
+  persiveValues();
+}
+
+//function to update my record section
+function updateMyRecord(){
+  getPersiveRecordResultArray()
+  if(recordResultArray==null){
+    recordResultArray=["s","t","a","r","t"];
+    persiveRecordResultArray();
+  }
+  getPersiveQuantumArray();
+  if(recordQuantumArray==null){
+    recordQuantumArray=["s","t","a","r","t"];
+    persiveRecordQuantumArray();
+  }
+  getPersiveProfitArray();
+  if(recordProfitArray==null){
+    recordProfitArray=["s","t","a","r","t"];
+    persiveRecordProfitArray();
+  }
+  
+  //updating Quantum for wait
+  R_QuantumId.forEach((element,index)=>{
+    document.getElementById(element).innerHTML=recordQuantumArray[index];
+  });
+
+  //updating Result for Wait
+  resultId.forEach((element,index)=>{
+    document.getElementById(element).innerHTML=recordResultArray[index];
+    document.getElementById(element).style.color=(recordResultArray[index]=="Fail")?"red":"green";
+  });
+
+  //updating Profit section for wait
+  profitId.forEach((element,index)=>{
+    document.getElementById(element).innerHTML=recordProfitArray[index];
+    let c=parseInt(recordProfitArray[index]);
+    document.getElementById(element).style.color=c>0? "green" : "red";
+  })
+}
+
+//Function to display the current bet info
+function waitValues(){
+  getPersiveValues();
+  // console.log(userColor);
+  // console.log(userAmount);
+  for(let i=0;i<userColor.length;i++){
+    document.getElementById(R_QuantumId[i]).innerHTML=currQuantum;
+    document.getElementById(resultId[i]).innerHTML="Wait";
+    document.getElementById(resultId[i]).style.color="orange";
+    document.getElementById(profitId[i]).innerHTML="₹"+userAmount[i]+" on ("+userColor[i]+")";
+    document.getElementById(profitId[i]).style.color="black";
+  }
+}
+
+function Unavailable(){
+  alert("Currently Unavailable!!!\n Wait for next update Or Play with Red, Blue and Green.");
+}
+
+
+// =====================================functions to persive values on local storege of browser====================================================
 function persiveresultArray(){
-  string=JSON.stringify(resultArray);
-  localStorage.setItem("array",string);
+  resultString=JSON.stringify(resultArray);
+  localStorage.setItem("array",resultString);
 }
 
 function getpersiveresultArray(){
@@ -252,138 +477,31 @@ function getPersiveisChoosed(){
   isChoosed=JSON.parse(isChoosed);
 }
 
-function persiveRecord(){
-  let stringRecord=JSON.stringify(recordArray);
-  localStorage.setItem("Rarray",stringRecord);
-  // console.log(recordArray);
+function persiveRecordQuantumArray(){
+  let Qstr=JSON.stringify(recordQuantumArray);
+  localStorage.setItem("Qarray",Qstr);
+}
+function persiveRecordResultArray(){
+  let Rstr=JSON.stringify(recordResultArray);
+  localStorage.setItem("Rarray",Rstr);
+}
+function persiveRecordProfitArray(){
+  let Pstr=JSON.stringify(recordProfitArray);
+  localStorage.setItem("Parray",Pstr);
 }
 
-function getPersiveRecord(){
-  recordArray=localStorage.getItem("Rarray");
-  recordArray=JSON.parse(recordArray);
-  // console.log(recordArray);
+
+function getPersiveQuantumArray(){
+  recordQuantumArray=localStorage.getItem("Qarray");
+  recordQuantumArray=JSON.parse(recordQuantumArray);
+}
+function getPersiveRecordResultArray(){
+  recordResultArray=localStorage.getItem("Rarray");
+  recordResultArray=JSON.parse(recordResultArray);
+}
+function getPersiveProfitArray(){
+  recordProfitArray=localStorage.getItem("Parray");
+  recordProfitArray=JSON.parse(recordProfitArray);
 }
 
-function userInputRed(){
-  userColor="red";
-  userAmount=prompt("Enter amount for RED: ");
-  if(userAmount){
-    userAmount=parseInt(userAmount);
-    if(userAmount>userBalance){
-      alert("Insufficient Balance");
-    }
-    else{
-      console.log(userAmount);
-      console.log(userColor);
-      userBalance=userBalance-userAmount;
-      document.getElementById("Balance").innerHTML="₹ "+userBalance;
-      isChoosed=true;
-      persiveBalance();
-      persiveisChoosed();
-      persiveValues();
-    }
-  }
-}
-function userInputBlue(){
-  userColor="blue";
-  userAmount=prompt("Enter amountfor BLUE: ");
-  if(userAmount){
-    userAmount=parseInt(userAmount);
-    if(userAmount>userBalance){
-      alert("Insufficient Balance");
-    }
-    else{
-      console.log(userColor);
-      userBalance=userBalance-userAmount;
-      console.log(userAmount);
-      document.getElementById("Balance").innerHTML="₹ "+userBalance;
-      isChoosed=true;
-      persiveBalance();
-      persiveisChoosed();
-      persiveValues();
-    }
-  }
-}
-function userInputGreen(){
-  userColor="green";
-  userAmount=prompt("Enter amount for GREEN: ");
-  if(userAmount){
-    userAmount=parseInt(userAmount);
-    if(userAmount>userBalance){
-      alert("Insufficient Balance");
-    }
-    else{
-      console.log(userAmount);
-      console.log(userColor);
-      userBalance=userBalance-userAmount;
-      document.getElementById("Balance").innerHTML="₹ "+userBalance;
-      isChoosed=true;
-      persiveBalance();
-      persiveisChoosed();
-      persiveValues();
-    }
-  }
-}
 
-function win(){
-  recordArray.unshift(quantumArray[0]);
-  recordArray.unshift("success");
-  recordArray.unshift("green");
-  recordArray.unshift(userAmount*2);
-  let lengthofrecordArray=recordArray.length;
-  if(lengthofrecordArray>=6){
-    recordArray=recordArray.slice(0,-3);
-  }
-  userBalance=userBalance+(userAmount*2);
-  persiveBalance();
-  persiveRecord();
-
-}
-
-function Loss(){
-  recordArray.unshift(quantumArray[0]);
-  recordArray.unshift("Loss");
-  recordArray.unshift("red");
-  recordArray.unshift(-userAmount);
-  let lengthofrecordArray=recordArray.length;
-  if(lengthofrecordArray>=6){
-    recordArray=recordArray.slice(0,-3);
-  }
-  persiveRecord();
-}
-
-function winLoss(){
-  getPersiveValues();
-  
-  if(resultArray[0]%2==0){
-    userColor=="red"?win():Loss();
-    if(resultArray[0]==0){
-      userColor=="blue"?win():Loss();
-    }
-  }
-  else{
-    userColor=="green"?win():Loss();
-    if(resultArray[0]==5){
-      userColor=="blue"?win():Loss();
-    }
-  }
-}
-
-function updateMyRecord(){
-  // console.log(recordArray);
-  getPersiveRecord();
-  if(recordArray==null){
-    recordArray=[0,"blue","Nutral","Not sure"];
-    persiveRecord();
-  }
-  document.getElementById("A1").innerHTML=recordArray[3];
-  document.getElementById("R1").innerHTML=recordArray[2];
-  document.getElementById("R1").style.color=recordArray[1];
-  document.getElementById("P1").style.color=recordArray[1];
-  document.getElementById("P1").innerHTML=recordArray[0];
-  // console.log(recordArray);
-}
-
-function Unavailable(){
-  alert("Currently Unavailable!!!\n Wait for next update Or Play with Red, Blue and Green.");
-}
