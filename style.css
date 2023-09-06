@@ -305,5 +305,8 @@ hr{
     #Record-headline{
         font-size: 20px;
     }
+    .floating-button{
+        position: fixed;
+    }
 
 }

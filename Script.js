@@ -7,16 +7,16 @@ const currdate=date.getDate()<10? "0"+date.getDate() : date.getDate();
 const currmonth=date.getMonth()<10? "0"+date.getMonth() : date.getMonth();
 const curryear=date.getFullYear();
 
-let sec=40;
-// if(currmin%3==0){
-//   sec=120+(60-currsec);
-// }
-// else if((currmin+2)%3==0){
-//   sec=60+(60-currsec);
-// }
-// else{
-//   sec=0+(60-currsec);
-// }
+let sec;
+if(currmin%3==0){
+  sec=120+(60-currsec);
+}
+else if((currmin+2)%3==0){
+  sec=60+(60-currsec);
+}
+else{
+  sec=0+(60-currsec);
+}
 
 const quantumDate=curryear.toString()+ currmonth.toString()+ currdate.toString();
 const quantumPeriod=(Math.floor(((currhour*60)+currmin)/3)+1);
