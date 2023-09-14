@@ -102,6 +102,7 @@ function Timer(){
     result();
     reload();
   }
+  getPersiveisChoosed();
   if(isChoosed){
     waitValues();
   }
